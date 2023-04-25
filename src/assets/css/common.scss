@@ -1,0 +1,21 @@
+html, body {
+    position: relative;
+    width: 100%;
+    height: 100%;
+}
+
+.text-primary { color: $color-primary }
+.text-success { color: $color-success }
+.text-warning { color: $color-warning }
+.text-danger { color: $color-danger }
+.text-info { color: $color-info }
+
+.rotate {
+    animation: rotate 2s linear infinite;
+    display: inline-block;
+}
+
+@keyframes rotate {
+    0% {transform: rotate(0)}
+    100% {transform: rotate(360deg)}
+}

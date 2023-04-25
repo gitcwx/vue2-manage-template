@@ -1,0 +1,78 @@
+@font-face {
+  font-family: "manage-icon"; /* Project id 4009647 */
+  src: url('iconfont.eot?t=1682407053394'); /* IE9 */
+  src: url('iconfont.eot?t=1682407053394#iefix') format('embedded-opentype'), /* IE6-IE8 */
+       url('iconfont.woff2?t=1682407053394') format('woff2'),
+       url('iconfont.woff?t=1682407053394') format('woff'),
+       url('iconfont.ttf?t=1682407053394') format('truetype'),
+       url('iconfont.svg?t=1682407053394#manage-icon') format('svg');
+}
+
+.manage-icon {
+  font-family: "manage-icon" !important;
+  font-size: 16px;
+  font-style: normal;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-setting:before {
+  content: "\e78f";
+}
+
+.icon-user:before {
+  content: "\e7b0";
+}
+
+.icon-team:before {
+  content: "\e7b1";
+}
+
+.icon-home:before {
+  content: "\e7c6";
+}
+
+.icon-link:before {
+  content: "\e7e4";
+}
+
+.icon-down:before {
+  content: "\e7ef";
+}
+
+.icon-fullscreen:before {
+  content: "\e7f0";
+}
+
+.icon-fullscreen-exit:before {
+  content: "\e7f1";
+}
+
+.icon-indent:before {
+  content: "\e7f5";
+}
+
+.icon-outdent:before {
+  content: "\e7f6";
+}
+
+.icon-close:before {
+  content: "\e7fe";
+}
+
+.icon-question-circle-fill:before {
+  content: "\e847";
+}
+
+.icon-lock-fill:before {
+  content: "\e86b";
+}
+
+.icon-caret-down:before {
+  content: "\e8ec";
+}
+
+.icon-loading:before {
+  content: "\e756";
+}
+
