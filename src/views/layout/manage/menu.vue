@@ -67,15 +67,15 @@
             collapse () {
                 return this.$store.state.common.collapse
             },
-            permission () {
-                return this.$store.state.user.permission
+            routerList () {
+                return this.$store.state.user.routerList
             },
             onRoutes () {
                 return this.$route.path
             }
         },
         watch: {
-            permission: {
+            routerList: {
                 deep: true,
                 immediate: true,
                 handler (newVal) {

@@ -100,7 +100,7 @@
             if (!setting) {
                 setting = {
                     // 显示头部日期时间
-                    showTimer: false,
+                    showTimer: true,
                     // 默认是否显示标签栏
                     showTags: true,
                     // 菜单栏默认是否折叠

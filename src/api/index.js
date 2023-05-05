@@ -7,7 +7,7 @@ export const api = {
         password: '/user/password',
         del: '/user/del'
     },
-    permission: {
-        list: '/permission/list'
+    router: {
+        list: '/router/list'
     }
 }

@@ -196,15 +196,12 @@
                     data: this.searchData
                 }).then(res => {
                     this.$store.commit('SET_IS_LOADING', { isLoading: false })
-                    if (res.data.code === 's00') {
+                    if (res.data.code === 200) {
                         this.tableData = res.data.data
                         this.paginationData.total = res.data.total
                     } else {
                         this.$message.warning(res.data.msg)
                     }
-                }).catch(() => {
-                    this.$store.commit('SET_IS_LOADING', { isLoading: false })
-                    this.$message.error('未知错误，请稍后重试！')
                 })
             },
             reloadTableData () {
@@ -238,15 +235,12 @@
                         }
                     }).then(res => {
                         this.$store.commit('SET_IS_LOADING', { isLoading: false })
-                        if (res.data.code === 's00') {
+                        if (res.data.code === 200) {
                             this.$message.success(res.data.msg)
                             this.getTableData()
                         } else {
                             this.$message.warning(res.data.msg)
                         }
-                    }).catch(() => {
-                        this.$store.commit('SET_IS_LOADING', { isLoading: false })
-                        this.$message.error('未知错误，请稍后重试！')
                     })
                 })
             },
@@ -256,29 +250,26 @@
             },
             addUserDialogSubmit () {
                 this.$refs['add-user-form'].validate(valid => {
-                    if (valid) {
-                        this.$store.commit('SET_IS_LOADING', { isLoading: true })
-                        this.$axios({
-                            url: this.$api.user.add,
-                            method: 'post',
-                            data: this.addUserFormData
-                        }).then(res => {
-                            this.$store.commit('SET_IS_LOADING', { isLoading: false })
-                            if (res.data.code === 's00') {
-                                this.$message.success(res.data.msg)
-                                this.$refs['add-user-form'].resetFields()
-                                this.addUserDialogVisible = false
-                                this.getTableData()
-                            } else {
-                                this.$message.warning(res.data.msg)
-                            }
-                        }).catch(() => {
-                            this.$store.commit('SET_IS_LOADING', { isLoading: false })
-                            this.$message.error('未知错误，请稍后重试！')
-                        })
-                    } else {
-                        return false
-                    }
+                    if (!valid) { return false }
+                    this.$store.commit('SET_IS_LOADING', { isLoading: true })
+                    this.$axios({
+                        url: this.$api.user.add,
+                        method: 'post',
+                        data: {
+                            ...this.addUserFormData,
+                            password: this.$md5(this.addUserFormData.password)
+                        }
+                    }).then(res => {
+                        this.$store.commit('SET_IS_LOADING', { isLoading: false })
+                        if (res.data.code === 200) {
+                            this.$message.success(res.data.msg)
+                            this.$refs['add-user-form'].resetFields()
+                            this.addUserDialogVisible = false
+                            this.getTableData()
+                        } else {
+                            this.$message.warning(res.data.msg)
+                        }
+                    })
                 })
             },
             passwordDialogClose () {
@@ -287,28 +278,25 @@
             },
             passwordDialogSubmit () {
                 this.$refs['password-form'].validate(valid => {
-                    if (valid) {
-                        this.$store.commit('SET_IS_LOADING', { isLoading: true })
-                        this.$axios({
-                            url: this.$api.user.password,
-                            method: 'post',
-                            data: this.passwordFormData
-                        }).then(res => {
-                            this.$store.commit('SET_IS_LOADING', { isLoading: false })
-                            if (res.data.code === 's00') {
-                                this.$message.success(res.data.msg)
-                                this.$refs['password-form'].resetFields()
-                                this.passwordDialogVisible = false
-                            } else {
-                                this.$message.warning(res.data.msg)
-                            }
-                        }).catch(() => {
-                            this.$store.commit('SET_IS_LOADING', { isLoading: false })
-                            this.$message.error('未知错误，请稍后重试！')
-                        })
-                    } else {
-                        return false
-                    }
+                    if (!valid) { return false }
+                    this.$store.commit('SET_IS_LOADING', { isLoading: true })
+                    this.$axios({
+                        url: this.$api.user.password,
+                        method: 'post',
+                        data: {
+                            id: this.passwordFormData.id,
+                            newPassword: this.$md5(this.passwordFormData.newPassword)
+                        }
+                    }).then(res => {
+                        this.$store.commit('SET_IS_LOADING', { isLoading: false })
+                        if (res.data.code === 200) {
+                            this.$message.success(res.data.msg)
+                            this.$refs['password-form'].resetFields()
+                            this.passwordDialogVisible = false
+                        } else {
+                            this.$message.warning(res.data.msg)
+                        }
+                    })
                 })
             },
             valueToLabel (value, list) {

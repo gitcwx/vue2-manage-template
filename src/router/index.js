@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import permissionList from './permission'
+import verifyList from './verify'
 
 Vue.use(Router)
 
@@ -28,8 +28,8 @@ const routerList = [
         meta: { title: '登陆', fullscreen: true, free: true }
     },
 
-    // 需要权限控制的页面
-    ...permissionList,
+    // 需要校验权限的页面
+    ...verifyList,
 
     // allow
     {

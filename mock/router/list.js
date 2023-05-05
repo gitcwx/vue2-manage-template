@@ -1,10 +1,10 @@
 export default Mock => {
     Mock.mock(
-        /\/permission\/list/,
+        /\/router\/list/,
         'post',
         options => {
             return {
-                'code': 's00',
+                'code': 200,
                 'msg': '查询成功',
                 'data': [
                     {

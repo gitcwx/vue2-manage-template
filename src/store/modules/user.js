@@ -4,35 +4,29 @@ import { api } from '@/api'
 const user = {
     state: {
         token: '',
-        permission: [],
+        routerList: [],
         info: {}
     },
     mutations: {
         SET_TOKEN: (state, token) => {
             state.token = token
         },
-        SET_PERMISSION: (state, permission) => {
-            state.permission = permission
+        SET_ROUTER_LIST: (state, routerList) => {
+            state.routerList = routerList
         },
         SET_USER_INFO: (state, info) => {
             state.info = info
         }
     },
     actions: {
-        getPermission ({ commit }, params) {
+        getRouter ({ commit }, params) {
             return new Promise((resolve, reject) => {
                 axios({
-                    url: api.permission.list,
-                    method: 'post',
-                    data: {
-                        by: 'userId',
-                        limit: 999,
-                        orderName: 'createdAt',
-                        orderby: 'asc'
-                    }
+                    url: api.router.list,
+                    method: 'post'
                 }).then(res => {
-                    if (res.data && res.data.code === 's00') {
-                        commit('SET_PERMISSION', res.data.data)
+                    if (res.data && res.data.code === 200) {
+                        commit('SET_ROUTER_LIST', res.data.data)
                         resolve(res)
                     } else {
                         reject(res)
@@ -45,7 +39,7 @@ const user = {
         getUserInfo ({ commit }, params) {
             return new Promise((resolve, reject) => {
                 axios.post(api.user.info).then(res => {
-                    if (res.data && res.data.code === 's00') {
+                    if (res.data && res.data.code === 200) {
                         commit('SET_USER_INFO', res.data.data)
                         resolve(res)
                     } else {

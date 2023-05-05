@@ -4,9 +4,10 @@ import { router } from '@/router/index.js'
 import Axios from 'axios'
 import store from '@/store/index.js'
 import NProgress from 'nprogress'
+import md5 from 'md5'
 import globalComponents from '@/components'
 import { api } from '@/api'
-import { getToken, setToken } from '@/util/cookies.js'
+import { getToken, setToken } from '@/util/storage.js'
 
 import '@/assets/css/normalize.css'
 import '@/assets/css/common.scss'
@@ -88,7 +89,7 @@ process.env.NODE_ENV === 'devmock' && require('../mock')
 
 Axios.defaults.baseURL = process.env.VUE_APP_axiosDefaultsBaseURL
 Axios.defaults.timeout = 60000
-// 将cookie的令牌添加到请求头
+// 将token添加到请求头
 Axios.interceptors.request.use(config => {
   const token = getToken()
   if (typeof token !== 'undefined') {
@@ -107,8 +108,8 @@ Axios.interceptors.response.use(response => {
   }
   return response
 }, error => {
+  store.commit('SET_IS_LOADING', { isLoading: false })
   if (error.response) {
-    store.commit('SET_IS_LOADING', { isLoading: false })
     if (error.response.data && error.response.data.msg) {
       Message.warning(error.response.data.msg)
     } else {
@@ -119,12 +120,15 @@ Axios.interceptors.response.use(response => {
     }
     return new Promise(() => {
     })
+  } else {
+    Message.warning('未知错误，请稍后重试！')
+    return Promise.reject(error)
   }
-  return Promise.reject(error)
 })
 
 Vue.prototype.$axios = Axios
 Vue.prototype.$api = api
+Vue.prototype.$md5 = md5
 
 router.beforeEach((to, from, next) => {
   // 无需登陆的页面
@@ -141,16 +145,16 @@ router.beforeEach((to, from, next) => {
   NProgress.start();
   // 需登陆&需鉴权的页面
   (async () => {
-    if (store.state.user.permission.length === 0) {
-      await store.dispatch('getPermission')
+    if (store.state.user.routerList.length === 0) {
+      await store.dispatch('getRouter')
     }
     // 不放前面是因为初次加载需要获取菜单列表
     // 需登陆&不需鉴权的页面
     if (to.meta.allow) {
       next(); return
     }
-    const permission = store.state.user.permission
-    if (permission.some(v => v.name === to.name)) {
+    const routerList = store.state.user.routerList
+    if (routerList.some(v => v.name === to.name)) {
       next(); return
     }
     next({ name: '403' })

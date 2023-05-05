@@ -1,6 +1,6 @@
 // name字段需与接口返回的页面列表的name字段对应
 // 用于控制权限
-const permissionList = [
+const verifyList = [
     {
         path: '/dashboard',
         name: 'dashboard',
@@ -21,4 +21,4 @@ const permissionList = [
     }
 ]
 
-export default permissionList
+export default verifyList

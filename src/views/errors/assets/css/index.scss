@@ -1,36 +1,43 @@
 .page-error {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
     height: 100%;
-    background: #fff;
-    box-sizing: border-box;
+    padding-right: 10px;
+    position: relative;
+    overflow: hidden;
+    background-color: #fff;
 
-    .error-code {
-        margin-top: 70px;
-        line-height: 1;
-        font-size: 250px;
-        font-weight: bolder;
-        color: #2d8cf0;
+    .page-error-inner {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        overflow-y: scroll;
+        text-align: center;
 
-        .icon-lock-fill {
+        .error-code {
+            padding-top: 100px;
+            line-height: 1;
             font-size: 250px;
+            font-weight: bolder;
+            color: #2d8cf0;
+
+            .icon-lock-fill {
+                font-size: 250px;
+            }
+
+            span {
+                color: #00a854;
+            }
         }
 
-        span {
-            color: #00a854;
+        .error-desc {
+            font-size: 30px;
+            color: #777;
         }
-    }
 
-    .error-desc {
-        font-size: 30px;
-        color: #777;
-    }
-
-    .error-handle {
-        margin-top: 30px;
-        padding-bottom: 200px;
-
+        .error-handle {
+            margin-top: 30px;
+            padding-bottom: 100px;
+        }
     }
 }

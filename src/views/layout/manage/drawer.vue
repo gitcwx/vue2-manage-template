@@ -47,7 +47,11 @@
             return {
                 settingDrawer: false,
                 isLinked: true,
-                setting: {}
+                setting: {
+                    showTimer: true,
+                    showTags: true,
+                    collapse: 'auto'
+                }
             }
         },
         watch: {

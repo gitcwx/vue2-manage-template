@@ -39,7 +39,7 @@
 </template>
 
 <script>
-    import { removeToken } from '@/util/cookies.js'
+    import { removeToken } from '@/util/storage.js'
     export default {
         name: 'manage-header',
         data () {

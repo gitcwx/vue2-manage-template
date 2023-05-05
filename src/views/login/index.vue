@@ -1,6 +1,5 @@
 <template>
     <div class="page-login">
-        <canvas class="star-canvas" ref="star-canvas"></canvas>
         <div class="login-box">
             <div class="login-title">后台管理系统</div>
             <el-form
@@ -37,8 +36,7 @@
 </template>
 
 <script>
-    import { setToken } from '@/util/cookies.js'
-    import { starMove } from '@/util/star'
+    import { setToken } from '@/util/storage.js'
     import Vcode from 'vue-puzzle-vcode'
     export default {
         name: 'login-page',
@@ -58,17 +56,11 @@
                 }
             }
         },
-        mounted () {
-            this.starMove(this.$refs['star-canvas'])
-        },
         methods: {
             submitForm () {
-                this.$refs['login-form'].validate((valid) => {
-                    if (valid) {
-                        this.vCodeShow = true
-                    } else {
-                        return false
-                    }
+                this.$refs['login-form'].validate(valid => {
+                    if (!valid) { return false }
+                    this.vCodeShow = true
                 })
             },
             onSuccess () {
@@ -76,26 +68,23 @@
                 this.$axios({
                     url: this.$api.user.login,
                     method: 'post',
-                    data: this.formData
+                    data: {
+                        username: this.formData.username,
+                        password: this.$md5(this.formData.password)
+                    }
+                }).then(res => {
+                    this.$store.commit('SET_IS_LOADING', { isLoading: false })
+                    if (res.data.code === 200) {
+                        setToken(res.data.token)
+                        this.$router.push({ name: 'dashboard' })
+                    } else {
+                        this.$message.warning(res.data.msg)
+                    }
                 })
-                    .then((res) => {
-                        this.$store.commit('SET_IS_LOADING', { isLoading: false })
-                        if (res.data.code === 's00') {
-                            setToken(res.data.token)
-                            this.$router.push({ name: 'dashboard' })
-                        } else {
-                            this.$message.warning(res.data.msg)
-                        }
-                    })
-                    .catch(() => {
-                        this.$store.commit('SET_IS_LOADING', { isLoading: false })
-                        this.$message.error('未知错误，请稍后重试！')
-                    })
             },
             onClose () {
                 this.vCodeShow = false
-            },
-            starMove
+            }
         }
     }
 </script>
@@ -108,11 +97,6 @@
     background-size: 100% 100%;
     background: #333;
     overflow: hidden;
-
-    .star-canvas {
-        width: 100%;
-        height: 100%;
-    }
 
     .login-box {
         position: absolute;

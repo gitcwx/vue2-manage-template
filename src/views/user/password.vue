@@ -29,11 +29,11 @@
                 rules: {
                     password: [
                         { required: true, message: '请输入原密码', trigger: 'blur' },
-                        { pattern: /^[a-zA-Z0-9~!@#$%^&*()+=|{}\-_]{4,16}$/, message: '密码格式不正确', trigger: 'blur' }
+                        { pattern: /^[a-zA-Z0-9~!@#$%^&*()+=|{}\-_]{6,16}$/, message: '密码格式不正确', trigger: 'blur' }
                     ],
                     newPassword: [
                         { required: true, message: '请输入新密码', trigger: 'blur' },
-                        { pattern: /^[a-zA-Z0-9~!@#$%^&*()+=|{}\-_]{4,16}$/, message: '密码格式不正确', trigger: 'blur' },
+                        { pattern: /^[a-zA-Z0-9~!@#$%^&*()+=|{}\-_]{6,16}$/, message: '密码格式不正确', trigger: 'blur' },
                         {
                             validator: (rule, value, callback) => {
                                 if (this.formData.repeatPassword) {
@@ -65,32 +65,26 @@
         },
         methods: {
             submitForm () {
-                this.$refs['password-form'].validate((valid) => {
-                    if (valid) {
-                        this.$store.commit('SET_IS_LOADING', { isLoading: true })
-                        this.$axios({
-                            url: this.$api.user.password,
-                            method: 'post',
-                            data: {
-                                id: this.userInfo.id,
-                                password: this.formData.password,
-                                newPassword: this.formData.newPassword
-                            }
-                        }).then((res) => {
-                            this.$store.commit('SET_IS_LOADING', { isLoading: false })
-                            if (res.data.code === 's00') {
-                                this.$message.success(res.data.msg)
-                                this.$refs['password-form'].resetFields()
-                            } else {
-                                this.$message.warning(res.data.msg)
-                            }
-                        }).catch(() => {
-                            this.$store.commit('SET_IS_LOADING', { isLoading: false })
-                            this.$message.error('未知错误，请稍后重试！')
-                        })
-                    } else {
-                        return false
-                    }
+                this.$refs['password-form'].validate(valid => {
+                    if (!valid) { return false }
+                    this.$store.commit('SET_IS_LOADING', { isLoading: true })
+                    this.$axios({
+                        url: this.$api.user.password,
+                        method: 'post',
+                        data: {
+                            id: this.userInfo.id,
+                            password: this.formData.password,
+                            newPassword: this.formData.newPassword
+                        }
+                    }).then(res => {
+                        this.$store.commit('SET_IS_LOADING', { isLoading: false })
+                        if (res.data.code === 200) {
+                            this.$message.success(res.data.msg)
+                            this.$refs['password-form'].resetFields()
+                        } else {
+                            this.$message.warning(res.data.msg)
+                        }
+                    })
                 })
             }
         }
