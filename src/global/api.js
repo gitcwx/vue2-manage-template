@@ -1,4 +1,4 @@
-export const api = {
+export default {
     user: {
         list: '/user/list',
         info: '/user/info',

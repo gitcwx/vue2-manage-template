@@ -6,9 +6,9 @@ uiFiles.keys().forEach(key => {
 })
 
 export default {
-    install: (app) => {
+    install: (Vue, Option) => {
         components.forEach(component => {
-            app.component(component.name, component)
+            Vue.component(component.name, component)
         })
     }
 }

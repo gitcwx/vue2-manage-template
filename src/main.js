@@ -5,8 +5,10 @@ import Axios from 'axios'
 import store from '@/store/index.js'
 import NProgress from 'nprogress'
 import md5 from 'md5'
-import globalComponents from '@/components'
-import { api } from '@/api'
+import components from '@/components'
+import api from '@/global/api.js'
+import { dictionary } from '@/global/dictionary.js'
+import funs from '@/global/function.js'
 import { getToken, setToken } from '@/util/storage.js'
 
 import '@/assets/css/normalize.css'
@@ -47,6 +49,16 @@ import {
 } from 'element-ui'
 
 Vue.prototype.$ELEMENT = { size: 'small', zIndex: 3000 }
+// 阻止默认关闭事件，避免{ props:visible }冲突
+Dialog.props.showClose.default = false
+Dialog.props.closeOnClickModal.default = false
+Dialog.props.closeOnPressEscape.default = false
+// 为了与Dialog保持一致性
+MessageBox.setDefaults({
+  showClose: false,
+  closeOnClickModal: false,
+  closeOnPressEscape: false
+})
 
 Vue.use(Pagination)
 Vue.use(Dialog)
@@ -73,17 +85,17 @@ Vue.use(Menu)
 Vue.use(Submenu)
 Vue.use(MenuItem)
 Vue.use(Loading)
-
-// Vue.prototype.$loading = Loading.service
-Vue.prototype.$msgbox = MessageBox
 Vue.prototype.$alert = MessageBox.alert
 Vue.prototype.$confirm = MessageBox.confirm
-Vue.prototype.$prompt = MessageBox.prompt
 Vue.prototype.$message = Message
 
-Vue.use(globalComponents)
-
 Vue.config.productionTip = false
+Vue.prototype.$axios = Axios
+Vue.prototype.$md5 = md5
+Vue.prototype.$dic = dictionary
+Vue.prototype.$api = api
+Vue.use(components)
+Vue.use(funs)
 
 process.env.NODE_ENV === 'devmock' && require('../mock')
 
@@ -125,10 +137,6 @@ Axios.interceptors.response.use(response => {
     return Promise.reject(error)
   }
 })
-
-Vue.prototype.$axios = Axios
-Vue.prototype.$api = api
-Vue.prototype.$md5 = md5
 
 router.beforeEach((to, from, next) => {
   // 无需登陆的页面

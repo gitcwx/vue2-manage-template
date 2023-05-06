@@ -10,7 +10,7 @@ const verifyList = [
     {
         path: '/user/list',
         name: 'user.list',
-        component: () => import('@/views/user/list.vue'),
+        component: () => import('@/views/user/list/index.vue'),
         meta: { title: '用户列表' }
     },
     {
