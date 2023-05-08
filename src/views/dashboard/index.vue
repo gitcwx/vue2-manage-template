@@ -1,6 +1,10 @@
 <template>
     <div class="manage manage-dashboard">
         <div class="item">
+            身份证号：<ui-input-idcard placeholder="请输入身份证号" />
+        </div>
+
+        <div class="item">
             <ui-digital v-model="text" color="#409EFF" shadowColor="rgba(64,158,255,.1)" size="30" />
         </div>
 
@@ -101,5 +105,6 @@
     margin-bottom: 10px;
     display: flex;
     align-items: center;
+    white-space: nowrap;
 }
 </style>>

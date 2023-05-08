@@ -7,7 +7,7 @@
             <el-form-item
                 label="新密码"
                 prop="password"
-                :rules="{ required: true, pattern: /^[a-zA-Z0-9~!@#$%^&*()+=|{}\-_]{6,16}$/, message: '6-16位字母数字部分特殊符号' }"
+                :rules="{ required: true, pattern: /^[a-zA-Z0-9~!@#$%^&*()+=|{}\-_]{6,16}$/, trigger: 'blur', message: '6-16位字母数字部分特殊符号' }"
             >
                 <el-input v-model="formData.password" placeholder="请输入新密码" />
             </el-form-item>

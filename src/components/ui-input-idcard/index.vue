@@ -34,7 +34,7 @@
         '[01]', '(((?<=0)[1-9])|((?<=1)[012]))',
         // 日期
         '[0-3]', '(((?<=0)[1-9])|((?<=[12])[0-9])|((?<=3)[01]))',
-        // 派出所代码
+        // 派出所
         '[0-9]', '[0-9]',
         // 性别
         '[0-9]',
@@ -50,21 +50,24 @@
             return {
                 current: '',
                 tips: [],
-                showTips: false,
-                allPass: true
+                showTips: false
             }
         },
         watch: {
             value: {
                 immediate: true,
                 handler (newVal) {
-                    this.current = newVal.replace(/[^0-9xX]/g, '')
+                    this.current = this.formatValue(newVal)
                 }
             }
         },
         methods: {
+            // 限定只能输入数字和X
+            formatValue (val) {
+                return val ? val.replace(/[^0-9xX]/g, '').replace(/x$/, 'X') : ''
+            },
             onInput (val) {
-                this.current = val.replace(/[^0-9xX]/g, '')
+                this.current = this.formatValue(val)
                 this.$emit('input', this.current)
                 if (this.current) {
                     this.checkVal()
@@ -74,23 +77,19 @@
                 }
             },
             onBlur (event) {
-                this.$emit('blur', event)
                 this.showTips = false
-                this.autoComplete()
-            },
-            // 当正确输入前输入17位，失焦时自动补全第18位
-            autoComplete () {
-                if (this.current.length === 17 && this.allPass) {
-                    this.current += this.getLastChar()
-                }
+                this.$emit('blur', event)
+                // 移除失焦回填 无法触发校验
             },
             onChange (val) {
                 this.$emit('change', val)
             },
             checkVal () {
                 this.tips = []
-                this.allPass = true
-                for (let i = 0; i < this.current.length; i++) {
+                const len = Math.min(this.current.length, 17)
+                let allPass = true
+                // 校验前17位
+                for (let i = 0; i < len; i++) {
                     const item = this.current[i]
                     let status
                     // 有先行断言的，带上前面字符一起过校验
@@ -106,21 +105,26 @@
                     }
                     // 记录是否全部正确
                     if (!status) {
-                        this.allPass = false
+                        allPass = false
                     }
                     this.tips.push({
                         text: item,
                         status: status ? 'pass' : 'fail'
                     })
                 }
-                // 校验位检测 | 补全
-                if (this.allPass && this.current.length > 16) {
-                    const lastChar = this.getLastChar()
-                    if (this.current[17]) {
-                        this.tips[17].status = this.current[17] === lastChar ? 'pass' : 'fail'
-                    } else {
-                        this.tips[17] = { text: lastChar, status: '' }
-                    }
+
+                if (this.current.length < 17) { return }
+                // 输入第17位时 自动补全提示
+                const lastChar = this.getLastChar()
+                if (this.current.length === 17 && allPass) {
+                    this.tips[17] = { text: lastChar, status: '' }
+                    return
+                }
+                if (this.current.length < 18) { return }
+                // 输入第18位时 校验位检测
+                this.tips[17] = {
+                    text: this.current[17],
+                    status: allPass ? this.current[17].toUpperCase() === lastChar ? 'pass' : 'fail' : ''
                 }
             },
             // 年份补全
@@ -176,7 +180,7 @@
 
     .ui-input-idcard-popover {
         position: absolute;
-        top: 0;
+        top: 50px;
         left: 0;
         z-index: 9999;
         background-color: #e5f6ff;
@@ -187,7 +191,6 @@
         height: 42px;
         line-height: 40px;
         font-weight: bold;
-        margin-top: 40px;
         white-space: nowrap;
         letter-spacing: 1px;
 
@@ -197,6 +200,12 @@
             }
             &.pass {
                 color: #1dc043;
+            }
+            &:nth-child(7) {
+                margin-left: 6px;
+            }
+            &:nth-child(14) {
+                margin-right: 6px;
             }
         }
     }

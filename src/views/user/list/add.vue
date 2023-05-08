@@ -24,7 +24,7 @@
                 <el-input v-model="formData.phone" :maxlength="11" placeholder="请输入手机号" />
             </el-form-item>
             <el-form-item label="身份证号" prop="idcard">
-                <el-input v-model="formData.idcard" placeholder="请输入身份证号" />
+                <ui-input-idcard v-model="formData.idcard" placeholder="请输入身份证号" />
             </el-form-item>
         </el-form>
         <template #footer>
@@ -55,20 +55,21 @@
                     nickname: '',
                     password: '',
                     gender: '',
-                    phone: ''
+                    phone: '',
+                    idcard: ''
                 },
                 rules: {
-                    username: { required: true, pattern: /^[\u4e00-\u9fa5a-zA-Z0-9_]{2,16}$/, message: '2-16位中英文数字下划线' },
-                    nickname: { required: true, pattern: /^[\u4e00-\u9fa5a-zA-Z0-9_]{2,16}$/, message: '2-16位中英文数字下划线' },
-                    password: { required: true, pattern: /^[a-zA-Z0-9~!@#$%^&*()+=|{}\-_]{6,16}$/, message: '6-16位字母数字部分特殊符号' },
-                    gender: { required: true, message: '请选择性别' },
+                    username: { required: true, pattern: /^[\u4e00-\u9fa5a-zA-Z0-9_]{2,16}$/, trigger: 'blur', message: '2-16位中英文数字下划线' },
+                    nickname: { required: true, pattern: /^[\u4e00-\u9fa5a-zA-Z0-9_]{2,16}$/, trigger: 'blur', message: '2-16位中英文数字下划线' },
+                    password: { required: true, pattern: /^[a-zA-Z0-9~!@#$%^&*()+=|{}\-_]{6,16}$/, trigger: 'blur', message: '6-16位字母数字部分特殊符号' },
+                    gender: { required: true, trigger: 'blur', message: '请选择性别' },
                     phone: { required: true, pattern: /^1[3-9]\d{9}$/, message: '请输入正确的手机号码' },
                     idcard: {
                         required: true,
-                        message: '请输入身份证号',
+                        message: '请输入正确的身份证号',
+                        trigger: 'blur',
                         validator: (rule, value, callback) => {
                             const result = checkIdCard(value)
-                            console.log(result.status)
                             if (result.status) {
                                 callback()
                             } else {
